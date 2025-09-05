@@ -1,0 +1,43 @@
+﻿@page "/"
+@inject IToDo ToDoService
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+<p>Welcome to your new app.</p>
+
+@if (TasksToDo is null)
+{
+    <p>Loading…</p>
+}
+else if (TasksToDo.Count == 0)
+{
+    <p class="text-muted">No todos yet.</p>
+}
+else
+{
+    @foreach (var todo in TasksToDo)
+    {
+        <ToDoCard ToDo="todo" />
+    }
+}
+
+@code {
+
+    private List<ToDoDto>? TasksToDo;
+
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     TasksToDo = await ToDoService.GetAllToDosAsync();
+    // }
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+        TasksToDo = await ToDoService.GetAllToDosAsync();
+
+        await InvokeAsync(StateHasChanged);
+
+    }
+}
