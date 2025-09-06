@@ -2,7 +2,7 @@
 
 namespace TeamBicep.WebApp.Models;
 
-public class ToDoModel
+public class TodoItem
 {
     [JsonPropertyName("id")]
     public string Id { get; set; } = string.Empty;
@@ -10,6 +10,6 @@ public class ToDoModel
     [JsonPropertyName("name")]
     public string Name { get; set; } = string.Empty;
 
-    [JsonPropertyName("is-completed")]
-    public bool IsCompleted { get; set; }
+    [JsonPropertyName("completed")]
+    public bool Completed { get; set; }
 }

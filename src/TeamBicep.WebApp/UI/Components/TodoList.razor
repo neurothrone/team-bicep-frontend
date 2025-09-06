@@ -1,0 +1,11 @@
+@foreach (var todo in Items)
+{
+    <TodoItemCard TodoItem="todo"/>
+}
+
+@code {
+
+    [Parameter, EditorRequired]
+    public required List<TodoItemDto> Items { get; set; }
+
+}

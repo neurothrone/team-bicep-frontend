@@ -1,15 +1,14 @@
 ﻿@rendermode InteractiveServer
+
 <!--Att göra: Skapa card layout som komponent för vår collection Todo -->
 <div class="card ToDoCard-bg mb-3" style="max-width: 18rem;">
     <div class="bg-secondary card-header">Header</div>
     <div class="ToDoCard-title card-body">
-        <h5>@ToDo?.Name</h5>
-        <FormCheck isChecked=@(ToDo?.IsCompleted ?? false) />
-       
+        <h5>@TodoItem?.Name</h5>
+        <FormCheck IsChecked=@(TodoItem?.Completed ?? false) />
     </div>
 </div>
 
 @code {
-
-    [Parameter] public ToDoDto? ToDo { get; set; }
+    [Parameter] public TodoItemDto? TodoItem { get; set; }
 }

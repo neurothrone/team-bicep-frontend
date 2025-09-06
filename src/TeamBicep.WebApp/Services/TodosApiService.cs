@@ -3,15 +3,8 @@ using TeamBicep.WebApp.Services.Interface;
 
 namespace TeamBicep.WebApp.Services;
 
-public class ToDoService : IToDo
+public class TodosApiService(HttpClient httpClient) : ITodosService
 {
-    private readonly HttpClient _httpClient;
-
-    public ToDoService(HttpClient httpClient)
-    {
-        _httpClient = httpClient;
-    }
-
     //public async Task<ToDoModel> CreateToDoAsync(ToDoModel toDo)
     //{
     //    //TODO: call to API / backend service to create a new ToDo item
@@ -27,15 +20,12 @@ public class ToDoService : IToDo
 
     //}
 
-    public async Task<List<ToDoDto>> GetAllToDosAsync()
+    public async Task<List<TodoItemDto>> GetAllTodosAsync()
     {
-        //TODO: call to API / backend service to get all ToDo items
-        var response = await _httpClient.GetFromJsonAsync<List<ToDoModel>>("api/todo");
-
-        var todos = (response ?? new List<ToDoModel>())
-            .Select(item => new ToDoDto { Name = item.Name, IsCompleted = item.IsCompleted })
+        var response = await httpClient.GetFromJsonAsync<List<TodoItem>>("api/todos");
+        var todos = (response ?? [])
+            .Select(item => new TodoItemDto { Name = item.Name, Completed = item.Completed })
             .ToList();
-
         return todos;
     }
 
