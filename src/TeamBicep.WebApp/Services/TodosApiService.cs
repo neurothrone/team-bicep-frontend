@@ -5,40 +5,66 @@ namespace TeamBicep.WebApp.Services;
 
 public class TodosApiService(HttpClient httpClient) : ITodosService
 {
-    //public async Task<ToDoModel> CreateToDoAsync(ToDoModel toDo)
-    //{
-    //    //TODO: call to API / backend service to create a new ToDo item
+    private const string TodosEndpoint = "api/todos";
 
-
-    //    //throw new NotImplementedException(); // <-- Remove this line when implemented
-    //}
-
-    //public async Task<bool> IToDo.DeleteToDoAsync(int id)
-    //{
-    //    //TODO: call to API / backend service to delete a ToDo item by id
-    //    throw new NotImplementedException();// <-- Remove this line when implemented
-
-    //}
-
-    public async Task<List<TodoItemDto>> GetAllTodosAsync()
+    public async Task<List<TodoItem>> GetAllTodosAsync()
     {
-        var response = await httpClient.GetFromJsonAsync<List<TodoItem>>("api/todos");
-        var todos = (response ?? [])
-            .Select(item => new TodoItemDto { Name = item.Name, Completed = item.Completed })
-            .ToList();
-        return todos;
+        try
+        {
+            var response = await httpClient.GetFromJsonAsync<List<TodoItem>>(TodosEndpoint);
+            var todos = (response ?? [])
+                .ToList();
+            return todos;
+        }
+        catch
+        {
+            return [];
+        }
     }
 
-    //public async Task<ToDoModel?> IToDo.GetToDoByIdAsync(int id)
-    //{
-    //    // TODO: call to API / backend service to get a ToDo item by id
+    public async Task<TodoItem?> AddTodoItemAsync(TodoItem item)
+    {
+        try
+        {
+            var dto = new TodoItemDto { Name = item.Name };
+            var response = await httpClient.PostAsJsonAsync(TodosEndpoint, dto);
+            return response.IsSuccessStatusCode ? item : null;
+        }
+        catch
+        {
+            return null;
+        }
+    }
 
-    //    throw new NotImplementedException(); // <-- Remove this line when implemented
-    //}
+    public async Task<TodoItem?> UpdateTodoItemAsync(TodoItem todo)
+    {
+        try
+        {
+            var dto = new TodoItemDto { Name = todo.Name, Completed = todo.Completed };
 
-    //public async Task<ToDoModel?> IToDo.UpdateToDoAsync(int id, ToDoModel toDo)
-    //{
-    //    //TODO: call to API / backend service to update a ToDo item by id
-    //    throw new NotImplementedException();
-    //}
+            var response = await httpClient.PutAsJsonAsync($"{TodosEndpoint}/{todo.Id}", dto);
+            if (response.IsSuccessStatusCode)
+                return await response.Content.ReadFromJsonAsync<TodoItem>();
+
+            return null;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            return null;
+        }
+    }
+
+    public async Task<bool> DeleteTodoItemAsync(string id)
+    {
+        try
+        {
+            var response = await httpClient.DeleteAsync($"{TodosEndpoint}/{id}");
+            return response.IsSuccessStatusCode;
+        }
+        catch
+        {
+            return false;
+        }
+    }
 }

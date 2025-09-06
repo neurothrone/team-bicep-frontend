@@ -1,11 +1,64 @@
+@inject ITodosService TodosService
+
 @foreach (var todo in Items)
 {
-    <TodoItemCard TodoItem="todo"/>
+    <TodoItemCard
+        TodoItem="todo"
+        IsBusy="_isBusy"
+        OnToggled="ToggleTodo"
+        OnDeleted="DeleteTodo"
+    />
 }
 
 @code {
 
     [Parameter, EditorRequired]
-    public required List<TodoItemDto> Items { get; set; }
+    public required List<TodoItem> Items { get; set; }
+
+    private bool _isBusy;
+
+    private async Task ToggleTodo(TodoItem item)
+    {
+        if (_isBusy)
+            return;
+
+        _isBusy = true;
+        await Task.Delay(TimeSpan.FromSeconds(1));
+        
+        
+        var updatedItem = new TodoItem
+        {
+            Id = item.Id,
+            Name = item.Name,
+            Completed = !item.Completed
+        };
+
+        var updatedTodo = await TodosService.UpdateTodoItemAsync(updatedItem);
+        if (updatedTodo is null)
+        {
+            // TODO: Show error message
+            return;
+        }
+
+        var index = Items.FindIndex(e => e.Id == updatedTodo.Id);
+        if (index != -1)
+        {
+            Items[index] = updatedTodo;
+        }
+
+        _isBusy = false;
+    }
+
+    private async Task DeleteTodo(TodoItem item)
+    {
+        var deleted = await TodosService.DeleteTodoItemAsync(item.Id);
+        if (!deleted)
+        {
+            // TODO: Show error message
+            return;
+        }
+
+        Items.Remove(item);
+    }
 
 }

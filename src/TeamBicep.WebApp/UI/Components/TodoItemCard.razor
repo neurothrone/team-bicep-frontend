@@ -1,14 +1,36 @@
-﻿@rendermode InteractiveServer
-
-<!--Att göra: Skapa card layout som komponent för vår collection Todo -->
-<div class="card ToDoCard-bg mb-3" style="max-width: 18rem;">
+﻿<div class="card ToDoCard-bg mb-3" style="max-width: 18rem;">
     <div class="bg-secondary card-header">Header</div>
     <div class="ToDoCard-title card-body">
-        <h5>@TodoItem?.Name</h5>
-        <FormCheck IsChecked=@(TodoItem?.Completed ?? false) />
+        <h5>@TodoItem.Name</h5>
+
+        <button class="btn @(IsBusy ? "btn-secondary" : "btn-primary")"
+                disabled="@IsBusy"
+                @onclick="() => OnToggled.InvokeAsync(TodoItem)">
+                <span>
+                    @(TodoItem.Completed ? "Complete" : "Incomplete")
+                </span>
+        </button>
+
+
+        <button
+            class="btn btn-danger"
+            @onclick="() => OnDeleted.InvokeAsync(TodoItem)">Delete
+        </button>
     </div>
 </div>
 
 @code {
-    [Parameter] public TodoItemDto? TodoItem { get; set; }
+
+    [Parameter, EditorRequired]
+    public required TodoItem TodoItem { get; set; }
+
+    [Parameter, EditorRequired]
+    public bool IsBusy { get; set; } = false;
+
+    [Parameter, EditorRequired]
+    public EventCallback<TodoItem> OnToggled { get; set; }
+
+    [Parameter, EditorRequired]
+    public EventCallback<TodoItem> OnDeleted { get; set; }
+
 }

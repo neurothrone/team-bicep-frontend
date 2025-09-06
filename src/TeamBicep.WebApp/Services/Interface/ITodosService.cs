@@ -4,9 +4,8 @@ namespace TeamBicep.WebApp.Services.Interface;
 
 public interface ITodosService
 {
-    Task<List<TodoItemDto>> GetAllTodosAsync();
-    //Task<Models.ToDoModel?> GetToDoByIdAsync(int id);
-    //Task<Models.ToDoModel> CreateToDoAsync(Models.ToDoModel toDo);
-    //Task<Models.ToDoModel?> UpdateToDoAsync(int id, Models.ToDoModel toDo);
-    //Task<bool> DeleteToDoAsync(int id);
+    Task<List<TodoItem>> GetAllTodosAsync();
+    Task<TodoItem?> AddTodoItemAsync(TodoItem item);
+    Task<TodoItem?> UpdateTodoItemAsync(TodoItem item);
+    Task<bool> DeleteTodoItemAsync(string id);
 }
