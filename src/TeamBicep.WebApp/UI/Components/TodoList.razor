@@ -23,28 +23,19 @@
             return;
 
         _isBusy = true;
-        await Task.Delay(TimeSpan.FromSeconds(1));
-        
-        
-        var updatedItem = new TodoItem
-        {
-            Id = item.Id,
-            Name = item.Name,
-            Completed = !item.Completed
-        };
+        await Task.Delay(TimeSpan.FromMilliseconds(500));
 
-        var updatedTodo = await TodosService.UpdateTodoItemAsync(updatedItem);
+        item.Completed = !item.Completed;
+        var updatedTodo = await TodosService.UpdateTodoItemAsync(item);
         if (updatedTodo is null)
         {
-            // TODO: Show error message
+            // TODO: Show error message feedback
             return;
         }
 
         var index = Items.FindIndex(e => e.Id == updatedTodo.Id);
         if (index != -1)
-        {
             Items[index] = updatedTodo;
-        }
 
         _isBusy = false;
     }
@@ -54,7 +45,7 @@
         var deleted = await TodosService.DeleteTodoItemAsync(item.Id);
         if (!deleted)
         {
-            // TODO: Show error message
+            // TODO: Show error message feedback
             return;
         }
 

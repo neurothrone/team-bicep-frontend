@@ -25,7 +25,7 @@
     public required TodoItem TodoItem { get; set; }
 
     [Parameter, EditorRequired]
-    public bool IsBusy { get; set; } = false;
+    public bool IsBusy { get; set; }
 
     [Parameter, EditorRequired]
     public EventCallback<TodoItem> OnToggled { get; set; }
