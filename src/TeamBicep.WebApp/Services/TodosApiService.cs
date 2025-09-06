@@ -22,13 +22,15 @@ public class TodosApiService(HttpClient httpClient) : ITodosService
         }
     }
 
-    public async Task<TodoItem?> AddTodoItemAsync(TodoItem item)
+    public async Task<TodoItem?> AddTodoItemAsync(InputTodoItem item)
     {
         try
         {
-            var dto = new TodoItemDto { Name = item.Name };
-            var response = await httpClient.PostAsJsonAsync(TodosEndpoint, dto);
-            return response.IsSuccessStatusCode ? item : null;
+            var response = await httpClient.PostAsJsonAsync(TodosEndpoint, item);
+            if (!response.IsSuccessStatusCode)
+                return null;
+
+            return await response.Content.ReadFromJsonAsync<TodoItem>();
         }
         catch
         {
@@ -41,13 +43,10 @@ public class TodosApiService(HttpClient httpClient) : ITodosService
         try
         {
             var response = await httpClient.PutAsJsonAsync($"{TodosEndpoint}/{todo.Id}", todo);
-            if (response.IsSuccessStatusCode)
-            {
-                var updatedTodo = await response.Content.ReadFromJsonAsync<TodoItem>();
-                return updatedTodo;
-            }
+            if (!response.IsSuccessStatusCode)
+                return null;
 
-            return null;
+            return await response.Content.ReadFromJsonAsync<TodoItem>();
         }
         catch
         {

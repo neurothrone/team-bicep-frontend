@@ -2,7 +2,7 @@
 
 namespace TeamBicep.WebApp.Models;
 
-public class TodoItemDto
+public class InputTodoItem
 {
     [JsonPropertyName("name")]
     public string Name { get; set; } = string.Empty;
