@@ -1,0 +1,38 @@
+﻿<div class="card todo-card-bg mb-3" style="max-width: 18rem;">
+    <div class="bg-secondary card-header">Header</div>
+    <div class="todo-card-title card-body">
+        <h5>@TodoItem.Name</h5>
+
+        <button class="btn @ButtonBackgroundColor"
+                disabled="@IsBusy"
+                @onclick="() => OnToggled.InvokeAsync(TodoItem)">
+                <span>
+                    @(TodoItem.Completed ? "Complete" : "Incomplete")
+                </span>
+        </button>
+
+
+        <button
+            class="btn btn-danger"
+            @onclick="() => OnDeleted.InvokeAsync(TodoItem)">Delete
+        </button>
+    </div>
+</div>
+
+@code {
+
+    [Parameter, EditorRequired]
+    public required TodoItem TodoItem { get; set; }
+
+    [Parameter, EditorRequired]
+    public bool IsBusy { get; set; }
+
+    [Parameter, EditorRequired]
+    public EventCallback<TodoItem> OnToggled { get; set; }
+
+    [Parameter, EditorRequired]
+    public EventCallback<TodoItem> OnDeleted { get; set; }
+
+    private string ButtonBackgroundColor => IsBusy ? "btn-secondary" : TodoItem.Completed ? "btn-success" : "btn-primary";
+
+}

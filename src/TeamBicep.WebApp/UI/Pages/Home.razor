@@ -1,0 +1,28 @@
+﻿@page "/"
+@inject ITodosService TodosService
+
+<PageTitle>Get to work Peon!</PageTitle>
+
+@if (_todoItems is null)
+{
+    <p>Loading…</p>
+}
+else if (_todoItems.Count == 0)
+{
+    <p class="text-muted">No todos yet.</p>
+}
+else
+{
+    <TodoList Items="_todoItems"/>
+}
+
+@code {
+
+    private List<TodoItem>? _todoItems;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _todoItems = await TodosService.GetAllTodosAsync();
+    }
+
+}

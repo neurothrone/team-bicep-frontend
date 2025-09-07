@@ -1,10 +1,21 @@
-using TeamBicep.WebApp.Components;
+using TeamBicep.WebApp.Services;
+using TeamBicep.WebApp.Services.Interface;
+using TeamBicep.WebApp.UI.Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+// !: Services 
+builder.Services.AddScoped<ITodosService, TodosApiService>();
+
+var apiBaseUrl =
+    builder.Configuration["ApiBaseUrl"]
+    ?? throw new InvalidOperationException("ApiBaseUrl configuration is missing.");
+builder.Services.AddHttpClient<ITodosService, TodosApiService>(client => client.BaseAddress = new Uri(apiBaseUrl));
+
+builder.Services.AddCors();
 
 var app = builder.Build();
 
@@ -12,14 +23,22 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
+app.UseRouting();
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseAntiforgery();
+
+app.UseCors(policy =>
+{
+    policy
+        .AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+});
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
