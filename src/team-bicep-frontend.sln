@@ -1,11 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36327.8 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamBicep.WebApp", "TeamBicep.WebApp\TeamBicep.WebApp.csproj", "{3351B29E-2516-4DB4-97FF-B704D35D8A5D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D0AA2584-99AB-4859-9573-66AF204A6B60}"
 	ProjectSection(SolutionItems) = preProject
-		.gitignore = ../.gitignore
-		README.md = ../README.md
+		..\.gitignore = ..\.gitignore
+		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{48BE163B-3E85-4265-9C7F-5E83CB29F333}"
@@ -21,7 +24,13 @@ Global
 		{3351B29E-2516-4DB4-97FF-B704D35D8A5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3351B29E-2516-4DB4-97FF-B704D35D8A5D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3351B29E-2516-4DB4-97FF-B704D35D8A5D} = {48BE163B-3E85-4265-9C7F-5E83CB29F333}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A628A903-B703-4107-A2B8-717BCD5B95C8}
 	EndGlobalSection
 EndGlobal
