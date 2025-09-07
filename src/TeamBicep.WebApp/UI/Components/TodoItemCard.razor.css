@@ -1,8 +1,8 @@
-﻿.ToDoCard-bg {
+﻿.todo-card-bg {
     background-color: rgb(60, 60, 60);
 }
 
-.ToDoCard-title {
+.todo-card-title {
     color: #f8f9fa;
     background-color: transparent;
 }
