@@ -4,18 +4,33 @@ using TeamBicep.WebApp.UI.Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents();
+builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
-// !: Services 
+// !: Services
 builder.Services.AddScoped<ITodosService, TodosApiService>();
 
-var apiBaseUrl =
-    builder.Configuration["ApiBaseUrl"]
-    ?? throw new InvalidOperationException("ApiBaseUrl configuration is missing.");
-builder.Services.AddHttpClient<ITodosService, TodosApiService>(client => client.BaseAddress = new Uri(apiBaseUrl));
-
 builder.Services.AddCors();
+
+if (builder.Environment.IsDevelopment())
+{
+    var localApiUrl =
+        builder.Configuration["ApiBaseUrl"]
+        ?? throw new InvalidOperationException("ApiBaseUrl configuration is missing.");
+    builder.Services.AddHttpClient<ITodosService, TodosApiService>(client =>
+        client.BaseAddress = new Uri(localApiUrl)
+    );
+}
+else
+{
+    var prodApiUrl =
+        builder.Configuration["BackendApi"]
+        ?? Environment.GetEnvironmentVariable("BackendApi")
+        ?? throw new InvalidOperationException("API URL configuration is missing.");
+
+    builder.Services.AddHttpClient<ITodosService, TodosApiService>(client =>
+        client.BaseAddress = new Uri(prodApiUrl)
+    );
+}
 
 var app = builder.Build();
 
@@ -34,13 +49,9 @@ app.UseAntiforgery();
 
 app.UseCors(policy =>
 {
-    policy
-        .AllowAnyOrigin()
-        .AllowAnyHeader()
-        .AllowAnyMethod();
+    policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
 });
 
-app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
+app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
 app.Run();
