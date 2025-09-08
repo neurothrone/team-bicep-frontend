@@ -4,7 +4,8 @@ using TeamBicep.WebApp.UI.Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddRazorComponents().AddInteractiveServerComponents();
+builder.Services.AddRazorComponents()
+    .AddInteractiveServerComponents();
 
 // !: Services
 builder.Services.AddScoped<ITodosService, TodosApiService>();
@@ -48,10 +49,13 @@ app.UseStaticFiles();
 app.UseAntiforgery();
 
 app.UseCors(policy =>
-{
-    policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
-});
+    policy
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowAnyOrigin()
+);
 
-app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
+app.MapRazorComponents<App>()
+    .AddInteractiveServerRenderMode();
 
 app.Run();
